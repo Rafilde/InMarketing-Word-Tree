@@ -1,8 +1,8 @@
-function genereteTree() {
+function generateTree() {
   let text = document.getElementById("words").value;
   let keyWord = document.getElementById("keyWord").value.toLowerCase();
   let selectElement = document.getElementById("type").value;
-   
+  
   wordTreeOfGoogle(text, keyWord, selectElement);
 }
    
@@ -11,98 +11,95 @@ function clearTree() {
 }
    
 function wordTreeOfGoogle(text, keyWord, type){
-  let textOfTextArea = clearText(text)
-  let lines = textToMatrix(textOfTextArea)
-  let wordsOnly = textToMatrixOnlyWords(textOfTextArea)
-  //alert(lines)
- 
-  //--------------
-  /*let parts = [];
-const wordsMatrix = textOfTextArea.split(' ');
-  for(const line of wordsMatrix){
-    parts.push(line);
-    alert(line)
-}
-  alert(parts.length)
-  let teste = ["oi", "olá", "eae", "como vai"]
-  let testeDois = "oi olá eae como vai"
-  alert(teste.length)
-  alert(testeDois.length)*/
-  //--------------
-
+  let textOfTextArea = clearText(text);
+  
   google.charts.load('current', {packages:['wordtree']});
-    google.charts.setOnLoadCallback(drawChart);
+  google.charts.setOnLoadCallback(() => {
+      const data = new google.visualization.DataTable();
+      data.addColumn('string', 'Phrases');
 
-    function drawChart() {
-      var data = google.visualization.arrayToDataTable(
-        [ ['Phrases'],
-        /*['are awesome cats are better than dogs'],
-            ['are awesome cats eat kibble'],
-            ['are awesome cats are better than hamsters'],
-            ['eat mice cats are awesome'],
-            ['are awesome cats are people too'],
-            ['eat mice cats eat mice'],
-            ['eat mice cats meowing'],
-            ['eat mice cats in the cradle'],
-            ['in the cradle cats eat mice'],
-            ['in the cradle cats in the cradle lyrics'],
-            ['in the cradle cats eat kibble'],
-            ['cats for adoption'],
-            ['cats are family'],
-            ['cats eat mice'],
-            ['cats are better than kittens'],
-            ['cats are evil'],
-            ['cats are weird'],
-            ['cats eat mice'],*/
-         //...wordsOnly.map(line => [line]),
-        ...lines.map(line => [line]),
-      ]
-    );
+      const lines = linesWord(textOfTextArea, keyWord); // Obter as linhas que contêm a palavra raiz
 
-    var options = {
-      wordtree: {
-        format: 'implicit',
-        type: type,
-        word: keyWord,
+      for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          backAndFrontWords(line, keyWord, type, (line) => {
+              data.addRow([line]);
+          });
       }
-    };
 
-    var chart = new google.visualization.WordTree(document.getElementById('wordtree_basic'));
-    chart.draw(data, options);
-  }
+      const options = {
+          backgroundColor: '#f0f0f0',
+          wordtree: {
+              format: 'implicit',
+              type: type,
+              word: keyWord,
+          }
+      };
+
+      const chart = new google.visualization.WordTree(document.getElementById('wordtree_basic'));
+      chart.draw(data, options);
+  });
 }
 
 function clearText(text) {
-  let textWithOutSpace = text.trim().toLowerCase()
-  let clear = textWithOutSpace.replace(/[^\w\sÀ-ÖØ-öø-ÿ-]|(?<=\w)-(?=\w)/g, '');
-  return clear
+  let textWithOutSpace = text.trim().toLowerCase();
+  return textWithOutSpace.replace(/[^\w\sÀ-ÖØ-öø-ÿ-]|(?<=\w)-(?=\w)/g, '');
 }
    
-function textToMatrix(text) {
-const wordsMatrix = text.split(' ');
-let parts = [];
-  let partsCount = [];
-let lines = "";
- 
-for(const line of wordsMatrix){
-    if(partsCount.length <= 13) {
-    partsCount.push(line);
-    lines += line + " ";
-    } else {
-    partsCount = [];
-    parts.push(lines.trim());
-      partsCount.push(line);
-      lines = line + " ";
-    }
-}
- 
-  if (partsCount.length > 0) {
-    parts.push(lines.trim());
+function linesWord(text, keyWord) {
+  const lines = text.split('\n');
+  const linesWithKeyWord = [];
+
+  for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.toLowerCase().includes(keyWord)) {
+          linesWithKeyWord.push(line);
+      }
   }
- 
-return parts;
+
+  return linesWithKeyWord;
+}
+   
+function frontWords(text, rootWord, callback) {
+  let beginIndex = text.indexOf(rootWord) + rootWord.length;
+  let finalIndex = 0;
+
+  while ((finalIndex = text.indexOf(rootWord, beginIndex)) !== -1) {
+      const phrase = text.substring(beginIndex, finalIndex).trim();
+      if (phrase !== "") {
+          callback(`${rootWord} ${phrase}`);
+      }
+      beginIndex = finalIndex + rootWord.length;
+  }
+
+  if (beginIndex < text.length) {
+      callback(`${rootWord} ${text.substring(beginIndex).trim()}`);
+  }
 }
 
-function textToMatrixOnlyWords(text) {
-  return text.split(' ');
+function backWords(text, rootWord, callback) {
+  let beginIndex = 0;
+  let finalIndex = 0;
+
+  while ((finalIndex = text.indexOf(rootWord, beginIndex)) !== -1) {
+      const phrase = text.substring(beginIndex, finalIndex).trim();
+      if (phrase !== "") {
+          callback(`${phrase} ${rootWord}`);
+      }
+      beginIndex = finalIndex + rootWord.length;
+  }
+}
+
+function backAndFrontWords(text, keyWord, type, callback) {
+  if (type == 'suffix') {
+      alert('Em desenvolvimento');
+      return;
+  } else {
+      if (keyWord == "") {
+          alert("Digite a palavra raiz");
+          return;
+      }
+      frontWords(text, keyWord, callback);
+      backWords(text, keyWord, callback);
+  }
 }
