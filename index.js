@@ -92,7 +92,7 @@ function backWords(text, rootWord, callback) {
 
 function backAndFrontWords(text, keyWord, type, callback) {
   if (type == 'suffix') {
-      alert('Em desenvolvimento');
+      wordsOfTheTree(text,callback)
       return;
   } else {
       if (keyWord == "") {
@@ -102,4 +102,28 @@ function backAndFrontWords(text, keyWord, type, callback) {
       frontWords(text, keyWord, callback);
       backWords(text, keyWord, callback);
   }
+}
+
+function wordsOfTheTree(text, callback) {
+  let wordsMatrix = text.split(" ");
+  let partsCount = []; 
+  let parts = [];
+  let lines = "";
+
+  for(const line of wordsMatrix) {
+      if(partsCount.length <= 13) {
+          partsCount.push(line);
+          lines += line + " ";
+      } else {
+          partsCount = []; 
+          parts.push(lines.trim())
+          lines += line + " ";
+      }
+  }
+
+  if (partsCount.length > 0) {
+      parts.push(lines.trim());
+    }
+
+  return callback(`${parts}`);
 }
