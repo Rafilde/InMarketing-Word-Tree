@@ -3,7 +3,7 @@ function creatingTree() {
     let keyWord = document.getElementById("keyWord").value.toLowerCase();
     let selectElement = document.getElementById("type").value;
     
-    wordOfTheThree(text)
+    console.log(wordsOfTheThree(text))
     wordTreeOfGoogle(text, keyWord, selectElement);
 }
      
@@ -129,9 +129,26 @@ function backAndFrontWords(text, keyWord, type, callback) {
     }
 }
 
-function wordOfTheThree(text) {
-    const text = clearText(text)
+function wordsOfTheThree(text) {
+    const arrayWordsText = clearText(text).split(/\s+/)
     
-    const words = text.split(/\s+/) 
-    return print(words)
+    let wordsCount = {}
+    for(let i = 0; i < arrayWordsText.length; i++) {
+    	let word = arrayWordsText[i]
+    	if(wordsCount[word] === undefined) {
+      	wordsCount[word] = 1
+      } else {
+      	wordsCount[word]++
+      }
+    }
+    
+    let newWordsCount = []
+    for(let word in wordsCount) {
+    	newWordsCount.push([word, wordsCount[word]])
+    }
+    newWordsCount.sort(function(a, b) {
+        return b[1] - a[1];
+    })
+
+    return newWordsCount
 }
