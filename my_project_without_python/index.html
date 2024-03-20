@@ -1,17 +1,15 @@
 <html>
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="/static/index.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-    <link rel="stylesheet" href="/static/style.css">
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="container">
-      <img src="/static/img/inmarketinglogo-removebg-preview.png" alt="inmarketing-logo">
+      <img src="/img/inmarketinglogo-removebg-preview.png" alt="inmarketing-logo">
       <h1>Gerador de Árvore de Palavras</h1>
-      <form action="/" method="post">
       <div class="input-group">
-        <textarea name="user_text" id="words" rows="5" cols="50" placeholder="Digite as palavras"></textarea>
+        <textarea id="words" rows="5" cols="50" placeholder="Digite as palavras"></textarea>
       </div>
       <div class="input-group">
         <input type="text" id="keyWord" placeholder="Digite a palavra raiz">
@@ -24,17 +22,11 @@
         </select>
       </div>
       <div class="button-group">
-        <button type="button" onclick="generateTree()">Gerar Árvore</button>
-        <button type="button" class="buttonClear" onclick="clearTree()">Apagar Árvore</button>
+        <button type="button" onclick="creatingTree()">Gerar Árvore</button>
+        <button class="buttonClear" type="button" onclick="clearTree()">Apagar Árvore</button>
       </div>
-      <h1>Input</h1>
-    <p><input type="submit" value="Processar"/></p>
-    <textarea name="processed_text" rows="4" cols="50">{{ processed_text }}</textarea>
-    </form>
     </div>
    <div id="wordtree_basic" style="width: auto; height: auto; display: flex; justify-content: center;" class="wordtree-style"></div>
-
-
   </body>
 </html>
 
