@@ -3,12 +3,27 @@ function creatingTree() {
     let keyWord = document.getElementById("keyWord").value.toLowerCase();
     let selectElement = document.getElementById("type").value;
     
-    console.log(wordsOfTheThree(text))
-    wordTreeOfGoogle(text, keyWord, selectElement);
+    alertInfo(text, keyWord, selectElement);
 }
      
 function clearTree() {
     document.getElementById("wordtree_basic").innerHTML = "";
+    document.getElementById("words-table").innerHTML = '';
+
+    let wordsContainer = document.getElementById("words-container");
+    wordsContainer.style.display = "none";
+    
+    document.getElementById("words").value = "";
+}
+
+function alertInfo(text, keyWord, selectElement) {
+    
+    if (keyWord == "" && selectElement == "double") {
+        return  alert("Digite a palavra raiz");
+    } else {
+        wordTreeOfGoogle(text, keyWord, selectElement);
+    }
+    
 }
      
 function wordTreeOfGoogle(text, keyWord, type){
@@ -120,16 +135,13 @@ function backAndFrontWords(text, keyWord, type, callback) {
         wordsOfTheTree(text,callback)
         return;
     } else {
-        if (keyWord == "") {
-            alert("Digite a palavra raiz");
-            return;
-        }
         frontWords(text, keyWord, callback);
         backWords(text, keyWord, callback);
     }
 }
 
-function wordsOfTheThree(text) {
+//TABLE OF WORDS
+function wordOfTheThree(text) {
     const arrayWordsText = clearText(text).split(/\s+/)
     
     let wordsCount = {}
@@ -151,4 +163,60 @@ function wordsOfTheThree(text) {
     })
 
     return newWordsCount
+}
+
+function creatingWordsTable(text) {
+    let tbl = document.createElement("table");
+    let tbody = document.createElement("tbody");
+
+    var thead = document.createElement("thead");
+    let tr = document.createElement('tr');
+
+    const cellHeader = ["Palavras", "Quantidades"];
+    for (let i = 0; i < 2; i++) {
+        let th = document.createElement('th');
+        th.innerText = cellHeader[i];
+        tr.appendChild(th);
+    }
+    thead.appendChild(tr);
+    tbl.appendChild(thead);
+
+    for (let i = 0; i < text.length; i++) {
+        let tr = document.createElement('tr'); 
+
+        let td = document.createElement('td');
+        td.innerText = text[i][0];
+        tr.appendChild(td);
+
+        let tdTow = document.createElement('td');
+        tdTow.innerText = text[i][1];
+        tr.appendChild(tdTow);
+
+        tbody.appendChild(tr); 
+    }
+    tbl.appendChild(tbody);
+    return tbl;
+}
+
+
+function showRepeatedWords() {
+    const text = document.getElementById("words").value
+
+    if(text.trim() == "") {
+        alert("Informe o texto para visualizar as palavras")
+    } else {
+        const wordsRepeated = wordOfTheThree(text) 
+
+        let tableHTML = creatingWordsTable(wordsRepeated)
+    
+        const tableContainer = document.getElementById("words-table");
+        tableContainer.innerHTML = '';
+        tableContainer.appendChild(tableHTML);
+    
+        const divWithTableContainer = document.getElementById("words-container");
+        divWithTableContainer.style.display = "block";
+        divWithTableContainer.style.overflowX = "hidden"
+        divWithTableContainer.style.overflowY = "scroll"
+    }
+
 }

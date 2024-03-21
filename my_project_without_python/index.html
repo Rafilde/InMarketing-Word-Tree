@@ -1,29 +1,36 @@
 <html>
   <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="index.js"></script>
+    <script type="text/javascript" src="index.js"></script>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container">
-      <img src="/img/inmarketinglogo-removebg-preview.png" alt="inmarketing-logo">
-      <h1>Gerador de Árvore de Palavras</h1>
-      <div class="input-group">
-        <textarea id="words" rows="5" cols="50" placeholder="Digite as palavras"></textarea>
+    <div class="content">
+      <div class="container">
+        <img src="img/inmarketinglogo-removebg-preview.png" alt="inmarketing-logo">
+        <h1>Gerador de Árvore de Palavras</h1>
+          <div class="input-group">
+            <textarea name="user_text" id="words" rows="5" cols="50" placeholder="Digite as palavras"></textarea>
+          </div>
+          <div class="input-group">
+            <input type="text" id="keyWord" placeholder="Digite a palavra raiz">
+          </div>
+          <div class="input-group">
+            <label for="type">Selecione sua árvore:</label>
+            <select id="type" name="type">
+              <option value="suffix">Simples</option>
+              <option value="double">Dupla</option>
+            </select>
+          </div>
+          <div class="button-group">
+            <button type="button" onclick="creatingTree()">Gerar Árvore</button>
+            <button onclick="showRepeatedWords()">Gerar tabela de palavras</button>
+            <button type="button" class="buttonClear" onclick="clearTree()">Limpar dados</button>
+          </div>      
       </div>
-      <div class="input-group">
-        <input type="text" id="keyWord" placeholder="Digite a palavra raiz">
-      </div>
-      <div class="input-group">
-        <label for="type">Selecione sua árvore:</label>
-        <select id="type" name="type">
-          <option value="suffix">Simples</option>
-          <option value="double">Dupla</option>
-        </select>
-      </div>
-      <div class="button-group">
-        <button type="button" onclick="creatingTree()">Gerar Árvore</button>
-        <button class="buttonClear" type="button" onclick="clearTree()">Apagar Árvore</button>
+      <div id="words-container" class="container cont-table" style="display:none;">
+        <h2>Palavras Repetidas</h2>
+        <div id="words-table"></div>
       </div>
     </div>
    <div id="wordtree_basic" style="width: auto; height: auto; display: flex; justify-content: center;" class="wordtree-style"></div>
