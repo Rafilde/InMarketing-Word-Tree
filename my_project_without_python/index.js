@@ -44,13 +44,18 @@ function alertInfo(text, keyWord, selectElement) {
      
 function wordTreeOfGoogle(text, keyWord, type){
     let textOfTextArea = clearText(text);
+
+    if (!textOfTextArea.toLowerCase().includes(keyWord)) {
+        alert("A palavra-chave não foi encontrada no texto.");
+        return;
+    }
     
     google.charts.load('current', {packages:['wordtree']});
     google.charts.setOnLoadCallback(() => {
         const data = new google.visualization.DataTable();
         data.addColumn('string', 'Phrases');
 
-        const lines = linesWord(textOfTextArea, keyWord); // Obter as linhas que contêm a palavra raiz
+        const lines = linesWord(textOfTextArea, keyWord);
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
