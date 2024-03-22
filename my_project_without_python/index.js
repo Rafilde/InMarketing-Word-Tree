@@ -1,3 +1,14 @@
+function captureDiv() {
+    html2canvas(document.getElementById('wordtree_basic'), {backgroundColor: "#f0f0f0"}).then(function(canvas) {
+        var imgData = canvas.toDataURL('image/png');
+        var link = document.createElement('a');
+        link.download = 'wordtree_capture.png';
+        link.href = imgData;
+        link.click();
+    });
+}
+
+
 function creatingTree() {
     let text = document.getElementById("words").value;
     let keyWord = document.getElementById("keyWord").value.toLowerCase();
@@ -14,6 +25,7 @@ function clearTree() {
     wordsContainer.style.display = "none";
     
     document.getElementById("words").value = "";
+    document.getElementById("keyWord").value = ""; 
 }
 
 function alertInfo(text, keyWord, selectElement) {
