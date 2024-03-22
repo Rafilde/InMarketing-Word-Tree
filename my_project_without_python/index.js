@@ -8,7 +8,6 @@ function captureDiv() {
     });
 }
 
-
 function creatingTree() {
     let text = document.getElementById("words").value;
     let keyWord = document.getElementById("keyWord").value.toLowerCase();
@@ -29,8 +28,13 @@ function clearTree() {
 }
 
 function alertInfo(text, keyWord, selectElement) {
-    
-    if (keyWord == "" && selectElement == "double") {
+    const keyWordNullOrNot = keyWord != "" || keyWord == ""
+    const keyWordNull = keyWord == ""
+    const elementDoubleOrSuffixWithOutText = text == ""
+
+    if (((keyWordNullOrNot) && elementDoubleOrSuffixWithOutText)) {
+        return  alert("Digite o texto para gerar a árvore");
+    } else if (keyWordNull) {
         return  alert("Digite a palavra raiz");
     } else {
         wordTreeOfGoogle(text, keyWord, selectElement);
