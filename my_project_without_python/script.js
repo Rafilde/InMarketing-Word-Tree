@@ -1,5 +1,5 @@
 function captureDiv() {
-    html2canvas(document.getElementById('wordtree_basic'), {backgroundColor: "#f0f0f0"}).then(function(canvas) {
+    html2canvas(document.getElementById('wordtree_basic'), {backgroundColor: "#ffffff"}).then(function(canvas) {
         var imgData = canvas.toDataURL('image/png');
         var link = document.createElement('a');
         link.download = 'wordtree_capture.png';
@@ -10,7 +10,7 @@ function captureDiv() {
 
 function creatingTree() {
     let text = document.getElementById("words").value;
-    let keyWord = document.getElementById("keyWord").value.toLowerCase();
+    let keyWord = document.getElementById("keyWord").value.toLowerCase().trim();
     let selectElement = document.getElementById("type").value;
     
     alertInfo(text, keyWord, selectElement);
@@ -65,7 +65,7 @@ function wordTreeOfGoogle(text, keyWord, type){
         }
 
         const options = {
-            backgroundColor: '#f0f0f0',
+            backgroundColor: '#ffffff',
             wordtree: {
                 format: 'implicit',
                 type: type,
@@ -188,6 +188,7 @@ function wordOfTheThree(text) {
 
 function creatingWordsTable(text) {
     let tbl = document.createElement("table");
+    tbl.id = "myTable"
     let tbody = document.createElement("tbody");
 
     var thead = document.createElement("thead");
@@ -238,6 +239,35 @@ function showRepeatedWords() {
         divWithTableContainer.style.display = "block";
         divWithTableContainer.style.overflowX = "hidden"
         divWithTableContainer.style.overflowY = "scroll"
-    }
 
+        sortOrder = 'asc';
+
+    }
+}
+
+let sortOrder; 
+
+function sortTable() {
+    const table = document.getElementById("myTable");
+    const rows = Array.from(table.rows).slice(1); 
+
+    const compareRows = (a, b) => {
+        const countA = parseInt(a.cells[1].innerText);
+        const countB = parseInt(b.cells[1].innerText);
+        if (sortOrder === 'asc') {
+            return countA - countB;
+        } else {
+            return countB - countA;
+        }
+    };
+
+    const sortedRows = rows.sort(compareRows);
+
+    while (table.rows.length > 1) {
+        table.deleteRow(1); 
+    }
+    sortedRows.forEach(row => {
+        table.appendChild(row); 
+    });
+    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
 }
